@@ -13,4 +13,5 @@ public class MemberRequestDto {
     private String nickname;
     private String password;
     private String passwordConfirm;
+
 }

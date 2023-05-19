@@ -15,5 +15,4 @@ public class MemberController {
     public ResponseEntity<?> signup(MemberRequestDto memberRequestDto){
         return ResponseEntity.ok().body("asd");
     }
-
 }

@@ -15,4 +15,5 @@ public class MongoConfig {
         MongoDatabase database = mongoClient.getDatabase(DATABASE);
         return database;
     }
+
 }
