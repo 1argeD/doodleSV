@@ -16,9 +16,10 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Builder
 public class Member extends Timestamped {
-    @Id
+    @javax.persistence.Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long member_id;
+    @Column(name = "member_id", nullable = false)
+    private Long id;
 
     @Column
     private String nickname;
@@ -31,6 +32,10 @@ public class Member extends Timestamped {
 
     @Column
     private String role;
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public Member(String email, String nickname, String password) {
         this.email = email;

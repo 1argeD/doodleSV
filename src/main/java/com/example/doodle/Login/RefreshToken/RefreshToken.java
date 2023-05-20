@@ -1,5 +1,6 @@
 package com.example.doodle.Login.RefreshToken;
 
+import com.example.doodle.Member.Member;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -20,7 +21,10 @@ public class RefreshToken {
 
     private String tokenValue;
 
-    private void updateTokenValue(String token) {
+    @OneToOne
+    private Member member;
+
+    public void updateTokenValue(String token) {
         this.tokenValue =token;
     }
 }

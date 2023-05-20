@@ -7,6 +7,5 @@ import java.util.Optional;
 
 public interface RefreshTokenRepository extends MongoRepository<RefreshToken, Long> {
     Optional<RefreshToken> findByMember(Member member);
-
     void deleteByMember(Member member);
 }
