@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 public class MemberController {
-    private MemberService memberSevice;
+    private MemberService memberService;
 
     @PostMapping("/member/sign")
     public ResponseEntity<?> signup(MemberRequestDto memberRequestDto){
