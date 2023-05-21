@@ -9,9 +9,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.client.HttpClientErrorException;
 
-import javax.servlet.http.HttpServletRequest;
+
 import javax.servlet.http.HttpServletResponse;
 
 @Service
@@ -68,7 +67,7 @@ public class MemberService {
         String accessToken = jwtProvider.creatAuthorizationToken(member.getEmail(), member.getRole());
         String refreshToken = jwtProvider.createRefreshToken(member, member.getRole());
         tokenToHeaders(accessToken, refreshToken, response);
-        return new LoginResponseDto(member.getId(), member.getNickname(), true);
+        return new LoginResponseDto(member.getMember_id(), member.getNickname(), true);
     }
 
 }

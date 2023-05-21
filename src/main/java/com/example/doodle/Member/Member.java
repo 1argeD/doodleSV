@@ -5,21 +5,26 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.persistence.*;
 
 
-@Entity
+
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
+@Document( collection = "members")
 public class Member extends Timestamped {
-    @javax.persistence.Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "member_id", nullable = false)
-    private Long id;
+    @Transient
+    public static final String SEQUENCE_NAME = "posts_sequences";
+
+    @Id
+    private Long  member_id;
+
+    public void setMember_id(Long  id) {
+        this.member_id = id;
+    }
 
     @Column
     private String nickname;
@@ -33,10 +38,8 @@ public class Member extends Timestamped {
     @Column
     private String role;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
 
+    @Builder
     public Member(String email, String nickname, String password) {
         this.email = email;
         this.nickname = nickname;

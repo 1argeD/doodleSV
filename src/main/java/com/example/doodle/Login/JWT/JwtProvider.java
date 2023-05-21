@@ -18,7 +18,6 @@ import java.security.Key;
 import java.util.Date;
 
 import io.jsonwebtoken.security.Keys;
-import org.springframework.web.client.HttpClientErrorException;
 
 @Slf4j
 @Component
@@ -85,6 +84,7 @@ public class JwtProvider {
         long now = new Date().getTime();
         return (expiration.getTime() - now);
     }
+
 
     public String createRefreshToken(Member member, String role) {
         long tokenInvalidedTime = 1000*60*60*24;
