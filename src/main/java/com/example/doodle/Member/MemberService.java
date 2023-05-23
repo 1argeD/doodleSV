@@ -5,6 +5,7 @@ import com.example.doodle.Login.Dto.LoginResponseDto;
 import com.example.doodle.Login.Dto.SignupRequestDto;
 import com.example.doodle.Login.JWT.JwtFilter;
 import com.example.doodle.Login.JWT.JwtProvider;
+import com.fasterxml.jackson.annotation.JacksonInject;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -46,7 +47,7 @@ public class MemberService {
     }
 
     @Transactional
-    public void signup(SignupRequestDto requestDto) {
+    public void signup(SignupRequestDto requestDto) throws IllegalAccessError {
         checkEmailIsDuplication(requestDto.getEmail());
         String encodingPassword = passwordEncoder.encode(requestDto.getPassword());
         Member member = new Member(requestDto.getEmail(), requestDto.getNickname(), encodingPassword);

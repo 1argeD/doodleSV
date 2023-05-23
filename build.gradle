@@ -28,8 +28,12 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 
     /*몽고DB*/
-    implementation 'org.mongodb:mongodb-driver-sync:4.9.0'
-    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-mongodb-reactive', version: '2.5.1'
+    implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
+    implementation 'org.springframework.boot:spring-boot-starter-data-mongodb-reactive'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'de.flapdoodle.embed:de.flapdoodle.embed.mongo'
+    testImplementation 'io.projectreactor:reactor-test'
+
 
     /*jwt*/
     implementation group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.11.2'

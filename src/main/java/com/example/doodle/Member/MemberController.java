@@ -1,20 +1,18 @@
 package com.example.doodle.Member;
 
 import com.example.doodle.Login.Dto.SignupRequestDto;
-import com.example.doodle.Member.dto.MemberRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.persistence.Temporal;
 import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
 public class MemberController {
-    private MemberService memberService;
+    private final MemberService memberService;
 
     @PostMapping("/member/sign")
     public ResponseEntity<?> signup(@RequestBody SignupRequestDto requestDto){

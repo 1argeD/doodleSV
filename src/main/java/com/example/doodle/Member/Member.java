@@ -4,7 +4,6 @@ import com.example.doodle.Timestamped;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.persistence.*;
@@ -13,19 +12,16 @@ import javax.persistence.*;
 
 @Getter
 @AllArgsConstructor
-@NoArgsConstructor
 @Document( collection = "members")
 public class Member extends Timestamped {
     @Transient
     public static final String SEQUENCE_NAME = "posts_sequences";
-
     @Id
     private Long  member_id;
 
     public void setMember_id(Long  id) {
         this.member_id = id;
     }
-
     @Column
     private String nickname;
 
@@ -41,9 +37,11 @@ public class Member extends Timestamped {
 
     @Builder
     public Member(String email, String nickname, String password) {
+        super();
         this.email = email;
         this.nickname = nickname;
         this.password = password;
         role = "ROLE_USER";
     }
+
 }

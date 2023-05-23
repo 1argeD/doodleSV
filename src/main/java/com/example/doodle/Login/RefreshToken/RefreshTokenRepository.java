@@ -10,7 +10,7 @@ import java.util.Optional;
 
 
 @Configuration
-@EnableMongoRepositories(basePackages = "paint.paint")
+@EnableMongoRepositories(basePackages = "refresh_token")
 @EnableAsync
 public interface RefreshTokenRepository extends MongoRepository<RefreshToken, Long> {
     Optional<RefreshToken> findByMember(Member member);
