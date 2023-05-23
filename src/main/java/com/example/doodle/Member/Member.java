@@ -14,14 +14,12 @@ import javax.persistence.*;
 @AllArgsConstructor
 @Document( collection = "members")
 public class Member extends Timestamped {
-    @Transient
-    public static final String SEQUENCE_NAME = "posts_sequences";
-    @Id
-    private Long  member_id;
 
-    public void setMember_id(Long  id) {
-        this.member_id = id;
-    }
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
+    private Long member_id;
+
     @Column
     private String nickname;
 
@@ -37,7 +35,6 @@ public class Member extends Timestamped {
 
     @Builder
     public Member(String email, String nickname, String password) {
-        super();
         this.email = email;
         this.nickname = nickname;
         this.password = password;

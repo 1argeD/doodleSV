@@ -47,7 +47,7 @@ public class MemberService {
     }
 
     @Transactional
-    public void signup(SignupRequestDto requestDto) throws IllegalAccessError {
+    public void signup(SignupRequestDto requestDto)  {
         checkEmailIsDuplication(requestDto.getEmail());
         String encodingPassword = passwordEncoder.encode(requestDto.getPassword());
         Member member = new Member(requestDto.getEmail(), requestDto.getNickname(), encodingPassword);
