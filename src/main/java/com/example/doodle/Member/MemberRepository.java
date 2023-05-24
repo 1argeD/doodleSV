@@ -9,7 +9,7 @@ import java.util.Optional;
 
 
 @Repository
-public interface MemberRepository extends MongoRepository<Member, ObjectId> {
+public interface MemberRepository extends MongoRepository<Member, Long> {
    Optional<Member> findByEmail(String email);
    boolean existsByEmail(String email);
    boolean existsByNickname(String nickname);
