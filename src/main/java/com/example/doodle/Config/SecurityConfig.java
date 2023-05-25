@@ -4,6 +4,7 @@ package com.example.doodle.Config;
 import com.example.doodle.Login.JWT.JwtFilter;
 import com.example.doodle.Login.JWT.JwtProvider;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableAsync;
@@ -22,6 +23,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import java.util.Arrays;
 import java.util.List;
 
+@Slf4j
 @RequiredArgsConstructor
 @EnableWebSecurity
 @Configuration
@@ -30,7 +32,7 @@ public class SecurityConfig {
     private final JwtProvider jwtProvider;
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
-        return(web)->web.ignoring().antMatchers("/mongodb/**");
+        return(web)->web.ignoring().antMatchers("/h2-console/**");
     }
 
     @Bean
@@ -43,11 +45,12 @@ public class SecurityConfig {
         CorsConfiguration corsConfiguration = new CorsConfiguration();
 
         corsConfiguration.setAllowedOriginPatterns(Arrays.asList(
-                "http://localhost:27017",
                 "http://localhost:3000"
         ));
 
-        corsConfiguration.setAllowedMethods(List.of("*"));
+        corsConfiguration.setAllowedMethods(Arrays.asList("*"));
+
+        corsConfiguration.setAllowedHeaders(Arrays.asList("*"));
         corsConfiguration.setAllowCredentials(true);
 
         corsConfiguration.addExposedHeader("Authorization");
@@ -70,7 +73,6 @@ public class SecurityConfig {
                 .anyRequest().authenticated()
                 .and()
                 .addFilterBefore(new JwtFilter(jwtProvider), UsernamePasswordAuthenticationFilter.class);
-
         return http.build();
     }
 }

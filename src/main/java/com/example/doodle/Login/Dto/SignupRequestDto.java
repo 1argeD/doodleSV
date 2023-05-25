@@ -1,16 +1,12 @@
 package com.example.doodle.Login.Dto;
 
+import lombok.Data;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-
-@AllArgsConstructor
-@NoArgsConstructor
-@Getter
+@Data
 public class SignupRequestDto {
     private String email;
     private String nickname;
     private String password;
     private String passwordConfirm;
+
 }

@@ -47,6 +47,7 @@ public class JwtProvider {
                 .setExpiration(new Date(date.getTime() + TokenInvalidedTime))
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
+
     }
 
     public boolean validateToken(String token) {

@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.MongoDatabaseFactory;
+import org.springframework.data.mongodb.config.AbstractMongoClientConfiguration;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.convert.DbRefResolver;
 import org.springframework.data.mongodb.core.convert.DefaultDbRefResolver;
 import org.springframework.data.mongodb.core.convert.DefaultMongoTypeMapper;
@@ -21,14 +23,9 @@ import java.util.List;
 
 
 @Configuration
-public class MongoConfig {
-
-    MongoClient mongoClient = MongoClients.create(MongoClientSettings.builder()
-            .applyToClusterSettings(builder -> builder.hosts(List.of(new ServerAddress("localhost"))))
-            .build());
-
-    MongoDatabase database = mongoClient.getDatabase("paint");
-
-    MongoCollection<Document> collection = database.getCollection("asd");
-
+public class MongoConfig  {
+    @Bean
+    public MongoTemplate mongoTemplate(MongoClient mongoClient) {
+        return new MongoTemplate(mongoClient, "paint");
+    }
 }

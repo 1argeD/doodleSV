@@ -1,13 +1,10 @@
 package com.example.doodle.Member.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 
-@Getter
-@NoArgsConstructor
-@AllArgsConstructor
+import lombok.*;
+import lombok.extern.slf4j.Slf4j;
+
+@Data
 public class MemberRequestDto {
     private String email;
     private String nickname;

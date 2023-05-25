@@ -4,10 +4,10 @@ import com.example.doodle.Timestamped;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import org.bson.types.ObjectId;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-
-import javax.persistence.*;
-
+import org.springframework.data.mongodb.core.mapping.Field;
 
 
 @Getter
@@ -16,25 +16,27 @@ import javax.persistence.*;
 public class Member extends Timestamped {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
-    private Long member_id;
-
-    @Column
+    private String id;
+    @Field("nickname")
     private String nickname;
-
-    @Column
+    @Field("email")
     private String email;
-
-    @Column
+    @Field("password")
     private String password;
-
-    @Column
+    @Field("role")
     private String role;
 
+    public Member() {
+        super();
+    }
+
+    public String getId() {
+        return id;
+    }
 
     @Builder
     public Member(String email, String nickname, String password) {
+        super();
         this.email = email;
         this.nickname = nickname;
         this.password = password;
