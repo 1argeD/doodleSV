@@ -39,7 +39,7 @@ public class JwtProvider {
 
     public String createToken(String MemberEmail, String roles, Long TokenInvalidedTime) {
         Claims claims = Jwts.claims().setSubject(MemberEmail);
-        claims.put("Roles", roles);
+        claims.put("roles", roles);
         Date date = new Date();
         return Jwts.builder()
                 .setClaims(claims)
@@ -53,8 +53,13 @@ public class JwtProvider {
     public boolean validateToken(String token) {
         try {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
-        } catch ( SecurityException | MalformedJwtException e) {
-            log.info("Jwt claims is empty, 잘못된 JWT 토큰 입니다.");
+            return true;
+        } catch (SecurityException | MalformedJwtException e) {
+            log.info("Invalid JWT signature, 유효하지 않는 JWT 서명 입니다.");
+        } catch (ExpiredJwtException e) {
+            log.info("Expired JWT token, 만료된 JWT token 입니다.");
+        } catch (IllegalArgumentException e) {
+            log.info("JWT claims is empty, 잘못된 JWT 토큰 입니다.");
         }
         return false;
     }
@@ -79,12 +84,12 @@ public class JwtProvider {
         return new UsernamePasswordAuthenticationToken(principal, "", null);
     }
 
-    private Long getExpiredTime(String token) {
-        Date expiration = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody().getExpiration();
-
-        long now = new Date().getTime();
-        return (expiration.getTime() - now);
-    }
+//    private Long getExpiredTime(String token) {
+//        Date expiration = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody().getExpiration();
+//
+//        long now = new Date().getTime();
+//        return (expiration.getTime() - now);
+//    }
 
 
     public String createRefreshToken(Member member, String role) {
@@ -95,8 +100,11 @@ public class JwtProvider {
                         .member(member)
                         .build());
         refreshTokenObj.updateTokenValue(refreshToken);
+        refreshTokenRepository.save(refreshTokenObj);
         return refreshToken;
     }
+
+
 
 
     /*리 이슈 문제떄 사용할 로직*/

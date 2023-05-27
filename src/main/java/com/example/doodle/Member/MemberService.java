@@ -1,16 +1,16 @@
 package com.example.doodle.Member;
 
+import com.example.doodle.Exception.BadRequestException;
 import com.example.doodle.Login.Dto.LoginRequestDto;
 import com.example.doodle.Login.Dto.LoginResponseDto;
 import com.example.doodle.Login.Dto.SignupRequestDto;
 import com.example.doodle.Login.JWT.JwtFilter;
 import com.example.doodle.Login.JWT.JwtProvider;
-import com.fasterxml.jackson.annotation.JacksonInject;
+import com.example.doodle.Login.RefreshToken.RefreshTokenRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 
 import javax.servlet.http.HttpServletResponse;
@@ -19,6 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 @Service
 @RequiredArgsConstructor
 public class MemberService {
+    private final RefreshTokenRepository refreshTokenRepository;
     private final PasswordEncoder passwordEncoder;
 
     private final JwtProvider jwtProvider;
@@ -47,20 +48,17 @@ public class MemberService {
         }
     }
 
-
     public void signup(SignupRequestDto requestDto)  {
         checkEmailIsDuplication(requestDto.getEmail());
         String encodingPassword = passwordEncoder.encode(requestDto.getPassword());
         Member member = new Member(requestDto.getEmail(), requestDto.getNickname(), encodingPassword);
         memberRepository.save(member);
-
     }
 
     public void tokenToHeaders(String authorizationToken, String refreshToken, HttpServletResponse response) {
-        response.addHeader("Authorization", JwtFilter.BEARER_PREFIX +authorizationToken);
+        response.addHeader("Authorization", JwtFilter.BEARER_PREFIX + authorizationToken);
         response.addHeader("RefreshToken", refreshToken);
     }
-
 
     public LoginResponseDto login(LoginRequestDto requestDto, HttpServletResponse response) {
         Member member = memberRepository.findByEmail(requestDto.getEmail())
@@ -70,6 +68,10 @@ public class MemberService {
         String refreshToken = jwtProvider.createRefreshToken(member, member.getRole());
         tokenToHeaders(accessToken, refreshToken, response);
         return new LoginResponseDto(member.getId(), member.getNickname(), true);
+    }
+
+    public void logout(Member member) {
+       refreshTokenRepository.deleteByMember(member);
     }
 
 }

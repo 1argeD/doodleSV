@@ -15,8 +15,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     private final MemberRepository memberRepository;
 
     @Override
-    public UserDetails loadUserByUsername(String memberEmail) {
-        Optional<Member> member = memberRepository.findByEmail(memberEmail);
+    public UserDetails loadUserByUsername(String email) {
+        Optional<Member> member = memberRepository.findByEmail(email);
         return member
                 .map(UserDetailsImpl :: new)
                 .orElseThrow(()-> new IllegalArgumentException("아이디를 찾을 수 없습니다."));
