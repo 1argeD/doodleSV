@@ -1,6 +1,5 @@
 package com.example.doodle.Member;
 
-import com.example.doodle.Exception.BadRequestException;
 import com.example.doodle.Login.Dto.LoginRequestDto;
 import com.example.doodle.Login.Dto.LoginResponseDto;
 import com.example.doodle.Login.Dto.SignupRequestDto;
@@ -27,18 +26,20 @@ public class MemberService {
     private final MemberRepository memberRepository;
 
 
-    public void checkEmailIsDuplication(String email) {
+    public boolean checkEmailIsDuplication(String email) {
         boolean isDuplication = memberRepository.existsByEmail(email);
         if(isDuplication) {
             throw new IllegalArgumentException("이미 존재하는 회원입니다.");
         }
+        return isDuplication;
     }
 
-    public void checkNicknameDuplication(String nickname) {
+    public boolean checkNicknameDuplication(String nickname) {
         boolean isDuplication  = memberRepository.existsByNickname(nickname);
         if(isDuplication) {
             throw new IllegalArgumentException("이미 존재하는 닉네임입니다.");
         }
+        return false;
     }
 
     public void checkPassword(String password, String encodingPassword) {
@@ -64,10 +65,10 @@ public class MemberService {
         Member member = memberRepository.findByEmail(requestDto.getEmail())
                 .orElseThrow(() -> new IllegalArgumentException("아이디를 확인하세요."));
         checkPassword(requestDto.getPassword(), member.getPassword());
-        String accessToken = jwtProvider.creatAuthorizationToken(member.getEmail(), member.getRole());
+        String accessToken = jwtProvider.createAuthorizationToken(member.getEmail(), member.getRole());
         String refreshToken = jwtProvider.createRefreshToken(member, member.getRole());
         tokenToHeaders(accessToken, refreshToken, response);
-        return new LoginResponseDto(member.getId(), member.getNickname(), true);
+        return new LoginResponseDto(member.getId(), member.getEmail(), true);
     }
 
     public void logout(Member member) {

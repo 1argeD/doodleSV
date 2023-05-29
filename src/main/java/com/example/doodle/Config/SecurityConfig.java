@@ -44,20 +44,20 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration corsConfiguration = new CorsConfiguration();
 
-        corsConfiguration.setAllowedOriginPatterns(Arrays.asList(
+        corsConfiguration.setAllowedOriginPatterns(List.of(
                 "http://localhost:3000"
         ));
 
-        corsConfiguration.setAllowedMethods(Arrays.asList("*"));
+        corsConfiguration.setAllowedMethods(List.of("*"));
 
-        corsConfiguration.setAllowedHeaders(Arrays.asList("*"));
+        corsConfiguration.setAllowedHeaders(List.of("*"));
         corsConfiguration.setAllowCredentials(true);
 
         corsConfiguration.addExposedHeader("Authorization");
         corsConfiguration.addExposedHeader("RefreshToken");
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", corsConfiguration);
+        source.registerCorsConfiguration("/member/**", corsConfiguration);
         return source;
     }
 

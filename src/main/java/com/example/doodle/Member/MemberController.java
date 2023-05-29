@@ -29,13 +29,17 @@ public class MemberController {
 
     @PostMapping(value ="/member/eCheck")
     public ResponseEntity<?> emailCheck(@RequestBody String email) {
-        memberService.checkEmailIsDuplication(email);
+        if(!memberService.checkEmailIsDuplication(email)) {
+            throw new IllegalArgumentException("이미 존재하는 회원입니다.");
+        }
         return ResponseEntity.ok().body(Map.of("msg", "사용 가능한 이메일입니다."));
     }
 
     @PostMapping(value ="/member/nickCheck")
     public ResponseEntity<?> nickCheck(@RequestBody String nickname) {
-        memberService.checkNicknameDuplication(nickname);
+        if(!memberService.checkNicknameDuplication(nickname)) {
+            throw new IllegalArgumentException("이미 존재하는 닉네임입니다.");
+        }
         return ResponseEntity.ok().body(Map.of("msg", "사용 가능한 닉네임입니다."));
     }
 

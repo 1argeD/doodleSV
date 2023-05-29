@@ -37,8 +37,8 @@ public class JwtProvider {
         this.userDetailsService = userDetailsService;
     }
 
-    public String createToken(String MemberEmail, String roles, Long TokenInvalidedTime) {
-        Claims claims = Jwts.claims().setSubject(MemberEmail);
+    public String createToken(String memberEmail, String roles, Long TokenInvalidedTime) {
+        Claims claims = Jwts.claims().setSubject(memberEmail);
         claims.put("roles", roles);
         Date date = new Date();
         return Jwts.builder()
@@ -56,15 +56,18 @@ public class JwtProvider {
             return true;
         } catch (SecurityException | MalformedJwtException e) {
             log.info("Invalid JWT signature, 유효하지 않는 JWT 서명 입니다.");
+            log.info("Failed token: " + token);  // 추가: 잘못된 토큰 로깅
         } catch (ExpiredJwtException e) {
             log.info("Expired JWT token, 만료된 JWT token 입니다.");
+            log.info("Failed token: " + token);  // 추가: 만료된 토큰 로깅
         } catch (IllegalArgumentException e) {
             log.info("JWT claims is empty, 잘못된 JWT 토큰 입니다.");
+            log.info("Failed token: " + token);  // 추가: 잘못된 토큰 로깅
         }
         return false;
     }
 
-    public Claims parseClaims(String accessToken) {
+    private Claims parseClaims(String accessToken) {
         try {
             return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(accessToken).getBody();
         } catch (ExpiredJwtException e) {
@@ -72,7 +75,7 @@ public class JwtProvider {
         }
     }
 
-    public String creatAuthorizationToken(String memberEmail, String role) {
+    public String createAuthorizationToken(String memberEmail, String role) {
         Long tokenInvalidedTime = 10000L*60*60;
         return this.createToken(memberEmail, role, tokenInvalidedTime);
     }
@@ -92,9 +95,9 @@ public class JwtProvider {
 //    }
 
 
-    public String createRefreshToken(Member member, String role) {
+    public String createRefreshToken(Member member, String roles) {
         long tokenInvalidedTime = 1000*60*60*24;
-        String refreshToken = this.createToken(member.getEmail(), role, tokenInvalidedTime);
+        String refreshToken = this.createToken(member.getEmail(), roles, tokenInvalidedTime);
         RefreshToken refreshTokenObj = refreshTokenRepository.findByMember(member)
                 .orElse(RefreshToken.builder()
                         .member(member)
