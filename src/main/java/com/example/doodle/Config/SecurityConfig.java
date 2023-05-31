@@ -30,9 +30,10 @@ import java.util.List;
 public class SecurityConfig {
 
     private final JwtProvider jwtProvider;
+
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
-        return(web)->web.ignoring().antMatchers("/h2-console/**");
+        return (web) -> web.ignoring().antMatchers("/h2-console/**");
     }
 
     @Bean

@@ -9,7 +9,7 @@ import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 
-@Document( collection = "refreshToken")
+@Document(collection = "refreshToken")
 @Getter
 @AllArgsConstructor
 @Builder
@@ -22,6 +22,6 @@ public class RefreshToken {
     private Member member;
 
     public void updateTokenValue(String token) {
-        this.tokenValue =token;
+        this.tokenValue = token;
     }
 }

@@ -10,8 +10,10 @@ import java.util.Optional;
 @EnableMongoRepositories(basePackages = "members")
 @Repository
 public interface MemberRepository extends MongoRepository<Member, String> {
-   Optional<Member> findByEmail(String email);
-   boolean existsByEmail(String email);
-   boolean existsByNickname(String nickname);
+    Optional<Member> findByEmail(String email);
+
+    boolean existsByEmail(String email);
+
+    boolean existsByNickname(String nickname);
 
 }

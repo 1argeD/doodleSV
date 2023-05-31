@@ -76,7 +76,7 @@ public class JwtProvider {
     }
 
     public String createAuthorizationToken(String memberEmail, String role) {
-        Long tokenInvalidedTime = 10000L*60*60;
+        Long tokenInvalidedTime = 10000L * 60 * 60;
         return this.createToken(memberEmail, role, tokenInvalidedTime);
     }
 
@@ -96,7 +96,7 @@ public class JwtProvider {
 
 
     public String createRefreshToken(Member member, String roles) {
-        long tokenInvalidedTime = 1000*60*60*24;
+        long tokenInvalidedTime = 1000 * 60 * 60 * 24;
         String refreshToken = this.createToken(member.getEmail(), roles, tokenInvalidedTime);
         RefreshToken refreshTokenObj = refreshTokenRepository.findByMember(member)
                 .orElse(RefreshToken.builder()

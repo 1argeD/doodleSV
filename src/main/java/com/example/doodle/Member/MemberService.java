@@ -28,15 +28,15 @@ public class MemberService {
 
     public boolean checkEmailIsDuplication(String email) {
         boolean isDuplication = memberRepository.existsByEmail(email);
-        if(isDuplication) {
+        if (isDuplication) {
             throw new IllegalArgumentException("이미 존재하는 회원입니다.");
         }
         return isDuplication;
     }
 
     public boolean checkNicknameDuplication(String nickname) {
-        boolean isDuplication  = memberRepository.existsByNickname(nickname);
-        if(isDuplication) {
+        boolean isDuplication = memberRepository.existsByNickname(nickname);
+        if (isDuplication) {
             throw new IllegalArgumentException("이미 존재하는 닉네임입니다.");
         }
         return false;
@@ -44,12 +44,12 @@ public class MemberService {
 
     public void checkPassword(String password, String encodingPassword) {
         boolean isSome = passwordEncoder.matches(password, encodingPassword);
-        if(!isSome) {
+        if (!isSome) {
             throw new IllegalArgumentException("비밀번호를 확인하세요.");
         }
     }
 
-    public void signup(SignupRequestDto requestDto)  {
+    public void signup(SignupRequestDto requestDto) {
         checkEmailIsDuplication(requestDto.getEmail());
         String encodingPassword = passwordEncoder.encode(requestDto.getPassword());
         Member member = new Member(requestDto.getEmail(), requestDto.getNickname(), encodingPassword);
@@ -72,7 +72,7 @@ public class MemberService {
     }
 
     public void logout(Member member) {
-       refreshTokenRepository.deleteByMember(member);
+        refreshTokenRepository.deleteByMember(member);
     }
 
 }

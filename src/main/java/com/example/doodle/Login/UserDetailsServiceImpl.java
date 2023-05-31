@@ -18,7 +18,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     public UserDetails loadUserByUsername(String email) {
         Optional<Member> member = memberRepository.findByEmail(email);
         return member
-                .map(UserDetailsImpl :: new)
-                .orElseThrow(()-> new IllegalArgumentException("아이디를 찾을 수 없습니다."));
+                .map(UserDetailsImpl::new)
+                .orElseThrow(() -> new IllegalArgumentException("아이디를 찾을 수 없습니다."));
     }
 }
