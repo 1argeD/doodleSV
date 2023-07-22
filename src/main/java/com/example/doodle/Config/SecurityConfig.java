@@ -19,8 +19,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-
-import java.util.Arrays;
 import java.util.List;
 
 @Slf4j
@@ -58,7 +56,8 @@ public class SecurityConfig {
         corsConfiguration.addExposedHeader("RefreshToken");
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/member/**", corsConfiguration);
+        source.registerCorsConfiguration("/**", corsConfiguration);
+//        source.registerCorsConfiguration("/canvas/**", corsConfiguration);
         return source;
     }
 

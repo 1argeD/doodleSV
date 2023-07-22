@@ -39,7 +39,7 @@ public class MemberService {
         if (isDuplication) {
             throw new IllegalArgumentException("이미 존재하는 닉네임입니다.");
         }
-        return false;
+        return isDuplication;
     }
 
     public void checkPassword(String password, String encodingPassword) {
