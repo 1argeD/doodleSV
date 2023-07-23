@@ -59,7 +59,7 @@ public class CanvasController {
 
     @PutMapping("/canvas/invite/{canvasId}")
     public ResponseEntity<?>canvasInvite(@AuthenticationPrincipal UserDetailsImpl userDetails,
-                                         @RequestBody CanvasRequestDto requestDto, @PathVariable String canvasId) {
+                                         @RequestBody CanvasRequestDto requestDto, @PathVariable String canvasId) throws InterruptedException {
 
         Optional<Member> member = memberRepository.findById(userDetails.getMember().getId());
         CanvasResponseDto canvasResponseDto = canvasService.invite(member, canvasId, requestDto);

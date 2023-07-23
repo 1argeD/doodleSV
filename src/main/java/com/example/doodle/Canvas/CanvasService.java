@@ -85,9 +85,18 @@ public class CanvasService {
     }
 
     @Transactional
-    public CanvasResponseDto invite(Optional<Member> member, String canvasId, CanvasRequestDto requestDto) {
+    public CanvasResponseDto invite(Optional<Member> member, String canvasId, CanvasRequestDto requestDto) throws InterruptedException {
 
         Canvas canvas = canvasRepository.findCanvasById(canvasId);
+
+        for(String inviteIdCheck: canvas.getWith()) {
+            for(String requestIdList : requestDto.getWith()) {
+                if(inviteIdCheck.equals(requestIdList)) {
+                    throw new IllegalArgumentException("이미 초대 되어 있는 유저가 있습니다.");
+                }
+            }
+        }
+
         if(!member.get().getId().equals(canvas.getMaker())) {
             throw new IllegalArgumentException("메이커만 초대를 할 수 있습니다.");
         } else {
