@@ -73,10 +73,8 @@ public class CanvasService {
 
         List<Canvas> canvasList = canvasRepository.findCanvasByMaker(member.get().getId());
 
-        log.info(canvasTitle);
         int i = 0;
         for (Canvas canvas : canvasList) {
-            log.info(canvas.getCanvasTitle());
             if (canvas.getCanvasTitle().equals(canvasTitle)) {
                 canvasRepository.deleteCanvasByCanvasTitle(canvas.getCanvasTitle());
                 if (!member.get().getId().equals(canvas.getMaker())) {

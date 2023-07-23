@@ -28,8 +28,8 @@ public class CanvasController {
         return ResponseEntity.ok().body(canvasResponseDto);
     }
 
-    @GetMapping("/canvas/get/{maker}")
-    public ResponseEntity<?> getCanvas(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable String maker) {
+    @GetMapping("/canvas/get")
+    public ResponseEntity<?> getCanvas(@AuthenticationPrincipal UserDetailsImpl userDetails) {
 
         Optional<Member> member = memberRepository.findById(userDetails.getMember().getId());
 
