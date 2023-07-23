@@ -28,8 +28,8 @@ public class CanvasController {
         return ResponseEntity.ok().body(canvasResponseDto);
     }
 
-    @GetMapping("/canvas/get")
-    public ResponseEntity<?> getCanvas(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+    @GetMapping("/canvas/get/{maker}")
+    public ResponseEntity<?> getCanvas(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable String maker) {
 
         Optional<Member> member = memberRepository.findById(userDetails.getMember().getId());
 
@@ -57,11 +57,12 @@ public class CanvasController {
         return ResponseEntity.ok().body(Map.of("msg", "캔버스를 삭제하였습니다."));
     }
 
-    @PutMapping("/canvas/invite")
-    public ResponseEntity<?>canvasInvite(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody CanvasRequestDto requestDto) {
+    @PutMapping("/canvas/invite/{canvasId}")
+    public ResponseEntity<?>canvasInvite(@AuthenticationPrincipal UserDetailsImpl userDetails,
+                                         @RequestBody CanvasRequestDto requestDto, @PathVariable String canvasId) {
 
         Optional<Member> member = memberRepository.findById(userDetails.getMember().getId());
-        CanvasResponseDto canvasResponseDto = canvasService.invite(member, requestDto);
+        CanvasResponseDto canvasResponseDto = canvasService.invite(member, canvasId, requestDto);
 
         return ResponseEntity.ok().body(Map.of("with", canvasResponseDto.getWith(),"msg", "초대 성공"));
     }

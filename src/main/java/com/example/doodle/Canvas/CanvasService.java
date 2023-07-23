@@ -24,13 +24,10 @@ public class CanvasService {
     public CanvasResponseDto makeCanvas(Optional<Member> member, CanvasRequestDto requestDto) {
         String maker = member.get().getId();
 
-        ArrayList<String> with = new ArrayList<>();
-        with.add(requestDto.getWith());
-
         Canvas canvas = new Canvas.CanvasBuilder()
                 .maker(maker)
                 .canvasTitle(requestDto.getCanvasTitle())
-                .with(with)
+                .with(requestDto.getWith())
                 .build();
 
         canvasRepository.save(canvas);
@@ -44,12 +41,12 @@ public class CanvasService {
         List<Canvas> canvas = canvasRepository.findCanvasByMaker(member.get().getId());
 
 
-        if(canvas==null) {
+        if (canvas == null) {
             canvas = canvasRepository.findCanvasByWithExists(member.get().getId());
         }
 
         return canvas.stream()
-                .map(CanvasResponseDto :: CanvasResponseDtoBuilder)
+                .map(CanvasResponseDto::CanvasResponseDtoBuilder)
                 .collect(Collectors.toList());
     }
 
@@ -58,7 +55,7 @@ public class CanvasService {
         String maker = member.getId();
         Canvas canvas = canvasRepository.findCanvasByCanvasTitle(requestDto.getCanvasTitle());
 
-        if(!maker.equals(canvas.getMaker())) {
+        if (!maker.equals(canvas.getMaker())) {
             throw new IllegalArgumentException("방 메이커만 방제목을 수정할 수 있습니다.");
         }
 
@@ -70,7 +67,7 @@ public class CanvasService {
     @Transactional
     public void deleteCanvas(Optional<Member> member, String canvasTitle) {
 
-        if(member.isEmpty()) {
+        if (member.isEmpty()) {
             throw new IllegalArgumentException("회원 정보가 없습니다.");
         }
 
@@ -78,36 +75,27 @@ public class CanvasService {
 
         log.info(canvasTitle);
         int i = 0;
-        for(Canvas canvas : canvasList) {
+        for (Canvas canvas : canvasList) {
             log.info(canvas.getCanvasTitle());
-                if(canvas.getCanvasTitle().equals(canvasTitle)) {
-                    canvasRepository.deleteCanvasByCanvasTitle(canvas.getCanvasTitle());
-                    if(!member.get().getId().equals(canvas.getMaker())) {
-                        throw new IllegalArgumentException("방 메이커만 삭제가 가능합니다.");
+            if (canvas.getCanvasTitle().equals(canvasTitle)) {
+                canvasRepository.deleteCanvasByCanvasTitle(canvas.getCanvasTitle());
+                if (!member.get().getId().equals(canvas.getMaker())) {
+                    throw new IllegalArgumentException("방 메이커만 삭제가 가능합니다.");
                 }
-                }
+            }
         }
-
-//        throw new IllegalArgumentException("그런 이름의 canvas가 존재하지 않습니다.");
-
     }
 
     @Transactional
-    public CanvasResponseDto invite(Optional<Member> member, CanvasRequestDto requestDto) {
+    public CanvasResponseDto invite(Optional<Member> member, String canvasId, CanvasRequestDto requestDto) {
 
-        List<Canvas> canvasList = canvasRepository.findCanvasByMaker(member.get().getId());
-        ArrayList<String> with = new ArrayList<>();
-
-        for(Canvas canvas : canvasList) {
-            if(canvas.getCanvasTitle().equals(requestDto.getCanvasTitle())) {
-                if(requestDto.getWith().length()>1) {
-                    canvas.invite(with);
-                } else {
-                    canvas.invite(requestDto.getWith());
-                }
-                return CanvasResponseDto.CanvasResponseDtoBuilder(canvas);
-            }
+        Canvas canvas = canvasRepository.findCanvasById(canvasId);
+        if(!member.get().getId().equals(canvas.getMaker())) {
+            throw new IllegalArgumentException("메이커만 초대를 할 수 있습니다.");
+        } else {
+            canvas.invite(requestDto.getWith());
+            canvasRepository.save(canvas);
         }
-        return null;
+        return CanvasResponseDto.CanvasResponseDtoBuilder(canvas);
     }
 }

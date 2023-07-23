@@ -28,10 +28,6 @@ public class Canvas {
         this.canvasTitle = put_canvas_title;
     }
 
-    void invite(String you) {
-        this.with.add(you);
-    }
-
     void invite(ArrayList<String> yous) {
         this.with.addAll(yous);
     }

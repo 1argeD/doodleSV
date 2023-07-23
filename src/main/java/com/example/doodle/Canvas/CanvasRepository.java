@@ -14,6 +14,8 @@ import java.util.Optional;
 public interface CanvasRepository extends MongoRepository<Canvas, String> {
    List<Canvas> findCanvasByMaker(String maker);
 
+   Canvas findCanvasById(String canvasId);
+
     List<Canvas> findCanvasByWithExists(String withId);
     Canvas findCanvasByCanvasTitle(String canvas_title);
 
