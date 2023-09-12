@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -22,7 +23,11 @@ public class CanvasService {
 
     @Transactional
     public CanvasResponseDto makeCanvas(Optional<Member> member, CanvasRequestDto requestDto) {
-        String maker = member.get().getId();
+        boolean isMember = member.isPresent();
+        String maker = null;
+        if(isMember) {
+            maker = member.get().getId();
+        }
 
         Canvas canvas = new Canvas.CanvasBuilder()
                 .maker(maker)
@@ -37,15 +42,19 @@ public class CanvasService {
 
     @Transactional
     public List<CanvasResponseDto> getCanvas(Optional<Member> member) {
+        boolean isMember = member.isPresent();
+        List<Canvas> canvas = null;
+        if(isMember) {
+            canvas = canvasRepository.findCanvasByMaker(member.get().getId());
+        }
 
-        List<Canvas> canvas = canvasRepository.findCanvasByMaker(member.get().getId());
 
 
-        if (canvas == null) {
+        if (canvas == null&&isMember) {
             canvas = canvasRepository.findCanvasByWithExists(member.get().getId());
         }
 
-        return canvas.stream()
+        return Objects.requireNonNull(canvas).stream()
                 .map(CanvasResponseDto::CanvasResponseDtoBuilder)
                 .collect(Collectors.toList());
     }
@@ -89,6 +98,8 @@ public class CanvasService {
 
         Canvas canvas = canvasRepository.findCanvasById(canvasId);
 
+        boolean isMember = member.isPresent();
+
         for(String inviteIdCheck: canvas.getWith()) {
             for(String requestIdList : requestDto.getWith()) {
                 if(inviteIdCheck.equals(requestIdList)) {
@@ -97,7 +108,7 @@ public class CanvasService {
             }
         }
 
-        if(!member.get().getId().equals(canvas.getMaker())) {
+        if(isMember&&!member.get().getId().equals(canvas.getMaker())) {
             throw new IllegalArgumentException("메이커만 초대를 할 수 있습니다.");
         } else {
             canvas.invite(requestDto.getWith());

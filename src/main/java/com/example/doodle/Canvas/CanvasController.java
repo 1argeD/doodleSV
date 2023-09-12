@@ -19,6 +19,7 @@ import java.util.Optional;
 public class CanvasController {
     private final CanvasService canvasService;
     private final MemberRepository memberRepository;
+
     @PostMapping("/canvas")
     public ResponseEntity<?> makeCanvas(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody CanvasRequestDto canvasRequestDto) {
 
