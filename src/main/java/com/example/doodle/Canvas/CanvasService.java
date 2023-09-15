@@ -8,7 +8,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -47,9 +46,7 @@ public class CanvasService {
         if(isMember) {
             canvas = canvasRepository.findCanvasByMaker(member.get().getId());
         }
-
-
-
+        
         if (canvas == null&&isMember) {
             canvas = canvasRepository.findCanvasByWithExists(member.get().getId());
         }

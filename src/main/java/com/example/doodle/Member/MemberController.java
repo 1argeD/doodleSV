@@ -21,13 +21,13 @@ import java.util.Map;
 public class MemberController {
     private final MemberService memberService;
 
-    @PostMapping(value = "/member/sign")
+    @PostMapping(value = "/member/sign-up")
     public ResponseEntity<?> signup(@RequestBody SignupRequestDto requestDto) throws BadRequestException {
         memberService.signup(requestDto);
         return ResponseEntity.ok().body(Map.of("msg", "회원가입이 완료 되었습니다."));
     }
 
-    @PostMapping(value = "/member/eCheck")
+    @PostMapping(value = "/member/e-check")
     public ResponseEntity<?> emailCheck(@RequestBody String email) {
         if (!memberService.checkEmailIsDuplication(email)) {
             throw new IllegalArgumentException("이미 존재하는 회원입니다.");
@@ -35,7 +35,7 @@ public class MemberController {
         return ResponseEntity.ok().body(Map.of("msg", "사용 가능한 이메일입니다."));
     }
 
-    @PostMapping(value = "/member/nickCheck")
+    @PostMapping(value = "/member/nick-check")
     public ResponseEntity<?> nickCheck(@RequestBody String nickname) {
         if (!memberService.checkNicknameDuplication(nickname)) {
             throw new IllegalArgumentException("이미 존재하는 닉네임입니다.");
