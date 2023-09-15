@@ -27,7 +27,10 @@ public class PenController {
     }
 
     @PutMapping(value = "canvas/pen-put")
-    public List<String> penPut(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public List<String> penPut(@AuthenticationPrincipal UserDetailsImpl userDetails, List<String> spot) {
+        Member member = userDetails.getMember();
+        String member_id = member.getId();
+        penService.penUpdate(member_id,spot);
         return null;
     }
 }
