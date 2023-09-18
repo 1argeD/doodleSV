@@ -48,12 +48,14 @@ public class CanvasController {
         return ResponseEntity.ok().body(Map.of("canvas_id",canvasResponseDto.getId(), "canvas_title", canvasResponseDto.getCanvasTitle()));
     }
 
-    @DeleteMapping("/canvas/delete")
-    public ResponseEntity<?> deleteCanvas(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody CanvasRequestDto requestDto) {
+    @DeleteMapping("/canvas/delete/{canvasId}")
+    public ResponseEntity<?> deleteCanvas(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable String canvasId) {
 
         Optional<Member> member = memberRepository.findById(userDetails.getMember().getId());
-        String can = requestDto.getCanvasTitle();
-        canvasService.deleteCanvas(member, can);
+        if(member.isEmpty()) {
+            throw new IllegalArgumentException("회원정보가 없습니다.");
+        }
+        canvasService.deleteCanvas(member.get().getId(), canvasId);
 
         return ResponseEntity.ok().body(Map.of("msg", "캔버스를 삭제하였습니다."));
     }

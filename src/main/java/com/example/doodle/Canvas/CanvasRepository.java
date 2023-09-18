@@ -15,6 +15,5 @@ public interface CanvasRepository extends MongoRepository<Canvas, String> {
 
     List<Canvas> findCanvasByWithExists(String withId);
     Canvas findCanvasByCanvasTitle(String canvas_title);
-
-    void deleteCanvasByCanvasTitle(String canvasTitle);
+    void deleteById(String canvasId);
 }

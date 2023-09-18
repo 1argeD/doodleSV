@@ -3,6 +3,7 @@ package com.example.doodle.Canvas;
 import com.example.doodle.Canvas.Dto.CanvasRequestDto;
 import com.example.doodle.Canvas.Dto.CanvasResponseDto;
 import com.example.doodle.Member.Member;
+import com.example.doodle.Member.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -19,6 +20,7 @@ import java.util.stream.Collectors;
 @Service
 public class CanvasService {
     private final CanvasRepository canvasRepository;
+    private final MemberRepository memberRepository;
 
     @Transactional
     public CanvasResponseDto makeCanvas(Optional<Member> member, CanvasRequestDto requestDto) {
@@ -71,21 +73,16 @@ public class CanvasService {
     }
 
     @Transactional
-    public void deleteCanvas(Optional<Member> member, String canvasTitle) {
+    public void deleteCanvas(String memberId, String canvasId) {
 
-        if (member.isEmpty()) {
-            throw new IllegalArgumentException("회원 정보가 없습니다.");
-        }
-
-        List<Canvas> canvasList = canvasRepository.findCanvasByMaker(member.get().getId());
+        List<Canvas> canvasList =  canvasRepository.findCanvasByMaker(memberId);
 
         int i = 0;
         for (Canvas canvas : canvasList) {
-            if (canvas.getCanvasTitle().equals(canvasTitle)) {
-                canvasRepository.deleteCanvasByCanvasTitle(canvas.getCanvasTitle());
-                if (!member.get().getId().equals(canvas.getMaker())) {
-                    throw new IllegalArgumentException("방 메이커만 삭제가 가능합니다.");
-                }
+            if (!memberId.equals(canvas.getMaker())) {
+                throw new IllegalArgumentException("방 메이커만 삭제가 가능합니다.");
+            } else if (canvas.getId().equals(canvasId)) {
+                canvasRepository.deleteById(canvasId);
             }
         }
     }
