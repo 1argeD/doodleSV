@@ -1,4 +1,4 @@
-package com.example.doodle.Config;
+package com.example.doodle.Redis;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

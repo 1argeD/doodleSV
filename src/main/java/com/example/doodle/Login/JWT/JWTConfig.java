@@ -1,4 +1,4 @@
-package com.example.doodle.Config;
+package com.example.doodle.Login.JWT;
 
 import com.example.doodle.Login.JWT.JwtFilter;
 import com.example.doodle.Login.JWT.JwtProvider;

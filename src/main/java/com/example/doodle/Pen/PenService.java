@@ -8,6 +8,8 @@ import com.example.doodle.Member.MemberRepository;
 import com.example.doodle.Pen.DTO.PenRequestDTO;
 import com.example.doodle.Pen.DTO.PenResponseDTO;
 
+import com.example.doodle.Redis.RedisService;
+import com.example.doodle.Redis.RedisUtil;
 import lombok.RequiredArgsConstructor;
 
 import lombok.extern.slf4j.Slf4j;
@@ -24,6 +26,9 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Service
 public class PenService {
+    private final PenRepository penRepository;
+    private final RedisUtil redisUtil;
+    private final RedisService redisService;
     private final MemberRepository memberRepository;
     private final CanvasRepository canvasRepository;
     private Pen findPen;
@@ -38,7 +43,6 @@ public class PenService {
         boolean isMember = findMember.isPresent();
 
         int inviteMemberCHKcount = 0;
-
 
         if (!isMember) {
             throw new IllegalArgumentException("아이디가 없습니다.");
@@ -68,6 +72,9 @@ public class PenService {
                     .color(penRequestDTO.getColor())
                     .spot(penRequestDTO.getSpot())
                     .build();
+
+            penRepository.save(pen);
+            redisService.setPenValue(pen, pen.getId());
             penList.add(pen);
 
             return PenResponseDTO.PenResponseDTOBulider(pen, canvasId);
@@ -92,6 +99,7 @@ public class PenService {
         }
     return null;
     }
+
 
     public List<String> penUpdate(Pen pen, List<String> spot) {
         pen.penUpdate(spot);

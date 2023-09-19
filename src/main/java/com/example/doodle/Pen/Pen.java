@@ -9,6 +9,8 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 
+import javax.persistence.Id;
+import java.io.Serializable;
 import java.util.List;
 
 @ToString
@@ -16,12 +18,18 @@ import java.util.List;
 @AllArgsConstructor
 @Document(collection = "pen")
 @Builder
-public class Pen extends Timestamped {
+public class Pen implements Serializable {
+    @Id
+    private String id;
+    @Field("canvas_id")
     private String canvas_id;
+    @Field("member_id")
     private String member_id;
+    @Field("color")
     private String color;
+    @Field("spot")
     private List<String> spot;
-    private String date;
+
 
     void penUpdate(List<String> spot) {
         this.spot = spot;

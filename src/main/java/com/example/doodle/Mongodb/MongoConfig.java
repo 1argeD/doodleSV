@@ -1,4 +1,4 @@
-package com.example.doodle.Config;
+package com.example.doodle.Mongodb;
 
 import com.mongodb.client.*;
 

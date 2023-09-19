@@ -28,6 +28,8 @@ public class PenController {
         return ResponseEntity.ok().body(penResponseDTO);
     }
 
+
+
     @PutMapping(value = "/canvas/pen-put")
     public ResponseEntity<?> penPut(@AuthenticationPrincipal UserDetailsImpl userDetails,@RequestBody PenRequestDTO penRequestDTO) {
         Member member = userDetails.getMember();

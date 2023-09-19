@@ -59,6 +59,26 @@ public class CanvasService {
     }
 
     @Transactional
+    public CanvasResponseDto getOneCanvas(Member user, String canvas_id) {
+        int k = 0;
+        String userId = user.getId();
+        Canvas canvas = canvasRepository.findCanvasById(canvas_id);
+        List<String> invited = canvas.getWith();
+        for(String invitedUser : invited) {
+            if(invitedUser.equals(userId)) {
+                return CanvasResponseDto.CanvasResponseDtoBuilder(canvas);
+            } else{
+                ++k;
+            }
+            if(invited.size()==k) {
+                throw new IllegalArgumentException("초대되지 않은 맴버입니다.");
+            }
+        }
+        return CanvasResponseDto.CanvasResponseDtoBuilder(canvas);
+    }
+
+
+    @Transactional
     public CanvasResponseDto updateCanvas(Member member, CanvasRequestDto requestDto) {
         String maker = member.getId();
         Canvas canvas = canvasRepository.findCanvasByCanvasTitle(requestDto.getCanvasTitle());
