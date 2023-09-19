@@ -26,6 +26,8 @@ public class Member extends Timestamped {
     private String password;
     @Field("role")
     private String role;
+    @Field("date")
+    private String date;
 
     public Member() {
         super();

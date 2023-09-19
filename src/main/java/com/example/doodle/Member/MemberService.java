@@ -28,8 +28,8 @@ public class MemberService {
 
     public boolean checkEmailIsDuplication(String email) {
         boolean isDuplication = memberRepository.existsByEmail(email);
-        if (isDuplication) {
-            throw new IllegalArgumentException("이미 존재하는 회원입니다.");
+            if (isDuplication) {
+                throw new IllegalArgumentException("이미 존재하는 회원입니다.");
         }
         return false;
     }

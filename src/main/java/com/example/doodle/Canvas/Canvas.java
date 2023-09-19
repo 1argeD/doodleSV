@@ -1,5 +1,6 @@
 package com.example.doodle.Canvas;
 
+import com.example.doodle.Timestamped;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -13,7 +14,7 @@ import java.util.ArrayList;
 @AllArgsConstructor
 @Document(collection = "canvas")
 @Builder
-public class Canvas {
+public class Canvas extends Timestamped {
 
     @Id
     private String id;
@@ -23,6 +24,8 @@ public class Canvas {
     private String canvasTitle;
     @Field("with")
     private ArrayList<String> with;
+    @Field("date")
+    private String date;
 
     void setCanvas_title(String put_canvas_title) {
         this.canvasTitle = put_canvas_title;
