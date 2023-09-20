@@ -3,7 +3,7 @@ package com.example.doodle.Canvas;
 import com.example.doodle.Canvas.Dto.CanvasRequestDto;
 import com.example.doodle.Canvas.Dto.CanvasResponseDto;
 import com.example.doodle.Member.Member;
-import com.example.doodle.Member.MemberRepository;
+import com.example.doodle.Redis.RedisRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 @Service
 public class CanvasService {
     private final CanvasRepository canvasRepository;
-    private final MemberRepository memberRepository;
+    private final RedisRepository redisRepository;
 
     @Transactional
     public CanvasResponseDto makeCanvas(Optional<Member> member, CanvasRequestDto requestDto) {
@@ -37,6 +37,7 @@ public class CanvasService {
                 .build();
 
         canvasRepository.save(canvas);
+        redisRepository.subscribe(canvas.getId());
 
         return CanvasResponseDto.CanvasResponseDtoBuilder(canvas);
     }
