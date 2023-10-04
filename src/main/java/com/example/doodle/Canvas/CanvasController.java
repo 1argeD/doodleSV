@@ -6,6 +6,7 @@ import com.example.doodle.Login.UserDetailsImpl;
 import com.example.doodle.Member.Member;
 import com.example.doodle.Member.MemberRepository;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -14,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+@Slf4j
 @AllArgsConstructor
 @RestController
 public class CanvasController {
@@ -32,7 +34,6 @@ public class CanvasController {
 
     @GetMapping("/canvas/get")
     public ResponseEntity<?> getCanvas(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-
         Optional<Member> member = memberRepository.findById(userDetails.getMember().getId());
 
         List<CanvasResponseDto> canvasList = canvasService.getCanvas(member);
@@ -43,7 +44,7 @@ public class CanvasController {
     @GetMapping("/canvas/get/{canvasId}")
     public ResponseEntity<?> getOneCanvas(@AuthenticationPrincipal UserDetailsImpl userDetails,@PathVariable String canvasId) {
         Member user = userDetails.getMember();
-        CanvasResponseDto canvas = canvasService.getOneCanvas(user, canvasId);
+        CanvasResponseDto canvas = canvasService.getOneCanvas(user.getId(), canvasId);
         return ResponseEntity.ok().body(canvas);
 
     }

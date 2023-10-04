@@ -18,6 +18,7 @@ public class RedisRepository {
     private final RedisMessageListenerContainer redisMessageListenerContainer;
     private final PenRepository penRepository;
     private Map<String, ChannelTopic> topicMap;
+
     @PostConstruct
     private void init() {
         topicMap = new HashMap<>();

@@ -60,9 +60,8 @@ public class CanvasService {
     }
 
     @Transactional
-    public CanvasResponseDto getOneCanvas(Member user, String canvas_id) {
+    public CanvasResponseDto getOneCanvas(String userId, String canvas_id) {
         int k = 0;
-        String userId = user.getId();
         Canvas canvas = canvasRepository.findCanvasById(canvas_id);
         List<String> invited = canvas.getWith();
         for(String invitedUser : invited) {

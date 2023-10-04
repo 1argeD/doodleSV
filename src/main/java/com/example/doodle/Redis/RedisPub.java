@@ -7,6 +7,8 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.listener.ChannelTopic;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class RedisPub {
@@ -15,7 +17,9 @@ public class RedisPub {
     public void drawPublish(ChannelTopic channelTopic, PenResponseDTO pen) {
         redisTemplate.convertAndSend(channelTopic.getTopic(), pen);
     }
-    
+    public void testPublish(ChannelTopic channelTopic, ArrayList<String> test) {
+        redisTemplate.convertAndSend(channelTopic.getTopic(), test);
+    }
     /*메세지 보내기
     * public void chatPublish(ChannelTopic channelTopic, ChatDto message) {
     *  redisTemplate.convertAndSend(channelTopic.getTopic(), message)}
