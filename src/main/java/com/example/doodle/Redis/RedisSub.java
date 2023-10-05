@@ -13,6 +13,8 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 
+import java.util.ArrayList;
+
 @RequiredArgsConstructor
 @Service
 public class RedisSub implements MessageListener {
@@ -25,9 +27,13 @@ public class RedisSub implements MessageListener {
     public void onMessage(Message message, byte[] pattern) {
         try {
             String publishMessage = redisTemplate.getStringSerializer().deserialize(message.getBody());
-            PenResponseDTO pen = objectMapper.readValue(publishMessage, PenResponseDTO.class);
-            Canvas canvas = canvasRepository.findCanvasById(pen.getCanvas_id());
-            simpMessageSendingOperations.convertAndSend("/sub/canvas/"+canvas.getId(), message);
+            String test = objectMapper.readValue(publishMessage, String.class);
+            String[] testList = test.split(",");
+            String canvasId = testList[0];
+            //태스트를 위해서 값 일시 변경
+//            PenResponseDTO pen = objectMapper.readValue(publishMessage, PenResponseDTO.class);
+//            Canvas canvas = canvasRepository.findCanvasById(pen.getCanvas_id());
+            simpMessageSendingOperations.convertAndSend("/sub/testSub/"+canvasId, message);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }

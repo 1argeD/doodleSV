@@ -13,15 +13,16 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 public class WebSocketBrokerConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
-    public void configureMessageBroker(MessageBrokerRegistry registry) {
-        registry.enableSimpleBroker("/sub", "/topic"); //sub(quque) = 혼자, topic = 다수
-        registry.setApplicationDestinationPrefixes("/pub");
-    }
-
-    @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint("/ws")
                 .setAllowedOriginPatterns("*")
                 .withSockJS();
     }
+
+    @Override
+    public void configureMessageBroker(MessageBrokerRegistry registry) {
+        registry.enableSimpleBroker("/sub", "/topic"); //sub(quque) = 혼자, topic = 다수
+        registry.setApplicationDestinationPrefixes("/pub");
+    }
+
 }

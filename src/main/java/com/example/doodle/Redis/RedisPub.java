@@ -17,7 +17,7 @@ public class RedisPub {
     public void drawPublish(ChannelTopic channelTopic, PenResponseDTO pen) {
         redisTemplate.convertAndSend(channelTopic.getTopic(), pen);
     }
-    public void testPublish(ChannelTopic channelTopic, ArrayList<String> test) {
+    public void testPublish(ChannelTopic channelTopic, String test) {
         redisTemplate.convertAndSend(channelTopic.getTopic(), test);
     }
     /*메세지 보내기
