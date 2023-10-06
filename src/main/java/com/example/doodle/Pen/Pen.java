@@ -21,10 +21,10 @@ import java.util.List;
 public class Pen implements Serializable {
     @Id
     private String id;
-    @Field("canvas_id")
-    private String canvas_id;
-    @Field("member_id")
-    private String member_id;
+    @Field("canvasId")
+    private String canvasId;
+    @Field("memberId")
+    private String memberId;
     @Field("color")
     private String color;
     @Field("spot")

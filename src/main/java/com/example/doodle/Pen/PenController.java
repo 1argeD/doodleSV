@@ -6,7 +6,10 @@ import com.example.doodle.Member.Member;
 import com.example.doodle.Pen.DTO.PenRequestDTO;
 import com.example.doodle.Pen.DTO.PenResponseDTO;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.DestinationVariable;
+import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,7 +21,6 @@ import java.util.Map;
 @RestController
 public class PenController {
     private final PenService penService;
-    private final RefreshTokenRepository refreshTokenRepository;
 
     @PostMapping(value = "/canvas/pen/{canvasId}")
     public ResponseEntity<?> createPen (@AuthenticationPrincipal UserDetailsImpl userDetails,
@@ -28,7 +30,12 @@ public class PenController {
         return ResponseEntity.ok().body(penResponseDTO);
     }
 
-
+    @GetMapping(value = "/canvas/pen/{canvasId}")
+    public ResponseEntity<?> getPenList(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable String canvasId) {
+        String memberId = userDetails.getMember().getId();
+        List<Pen> penList = penService.getPen(memberId,canvasId);
+        return ResponseEntity.ok().body(penList);
+    }
 
     @PutMapping(value = "/canvas/pen-put")
     public ResponseEntity<?> penPut(@AuthenticationPrincipal UserDetailsImpl userDetails,@RequestBody PenRequestDTO penRequestDTO) {

@@ -37,7 +37,7 @@ public class CanvasService {
                 .build();
 
         canvasRepository.save(canvas);
-        redisRepository.subscribe(canvas.getId());
+//        redisRepository.subscribe(canvas.getId());
 
         return CanvasResponseDto.CanvasResponseDtoBuilder(canvas);
     }

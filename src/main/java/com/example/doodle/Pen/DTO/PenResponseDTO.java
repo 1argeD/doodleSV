@@ -23,7 +23,7 @@ public class PenResponseDTO {
         this.pen_id = pen.getId();
         this.color = pen.getColor();
         this.spot = pen.getSpot();
-        this.canvas_id = pen.getCanvas_id();
+        this.canvas_id = pen.getCanvasId();
     }
 
     public static PenResponseDTO PenResponseDTOBulider(Pen pen, String canvas_id) {

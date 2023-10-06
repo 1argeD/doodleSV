@@ -21,7 +21,6 @@ import java.util.Optional;
 public class CanvasController {
     private final CanvasService canvasService;
     private final MemberRepository memberRepository;
-    private final CanvasRepository canvasRepository;
 
     @PostMapping("/canvas")
     public ResponseEntity<?> makeCanvas(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody CanvasRequestDto canvasRequestDto) {
@@ -32,7 +31,7 @@ public class CanvasController {
         return ResponseEntity.ok().body(canvasResponseDto);
     }
 
-    @GetMapping("/canvas/get")
+    @GetMapping("/canvas/all")
     public ResponseEntity<?> getCanvas(@AuthenticationPrincipal UserDetailsImpl userDetails) {
         Optional<Member> member = memberRepository.findById(userDetails.getMember().getId());
 
@@ -41,7 +40,7 @@ public class CanvasController {
         return ResponseEntity.ok().body(canvasList);
     }
 
-    @GetMapping("/canvas/get/{canvasId}")
+    @GetMapping("/canvas/one/{canvasId}")
     public ResponseEntity<?> getOneCanvas(@AuthenticationPrincipal UserDetailsImpl userDetails,@PathVariable String canvasId) {
         Member user = userDetails.getMember();
         CanvasResponseDto canvas = canvasService.getOneCanvas(user.getId(), canvasId);
