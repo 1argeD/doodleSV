@@ -10,6 +10,7 @@ import com.example.doodle.Redis.RedisRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.logging.log4j.message.SimpleMessage;
+import org.bson.json.JsonObject;
 import org.springframework.data.redis.listener.ChannelTopic;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -18,6 +19,7 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import javax.validation.Valid;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,28 +36,12 @@ public class WebsocketController {
     private final CanvasRepository canvasRepository;
     private final RedisRepository redisRepository;
 
-    @MessageMapping(value = "/canvas/{canvasId}")
-    public void sendSpot(@DestinationVariable String canvasId, Member user) {
-
-    }
-
-    @GetMapping("/test")
-    public String plz() {
-        return "제발 돼라 도ㅓㅐ라 제바ㅣㅣㅣㅣㅣㄹ";
-    }
 
     @MessageMapping(value = "/testSub/{canvasId}")
-    @SendTo("/sub/testSub/{canvasId}")
-    public String enter(@DestinationVariable String canvasId) {
-        log.info("연결이 됐으면 이 로그를 띄움"+canvasId);
-     return "연결이 되었으니 서버에서 보냄";
-    }
-
-    @MessageMapping(value = "/testPub")
-    public void test(@DestinationVariable String test) {
-        log.info(test);
-        String canvasId = test.split(",")[0];
-        redisPub.testPublish(new ChannelTopic(canvasId), test);
+    public void enter(@DestinationVariable String canvasId,String test) {
+        log.info("연결이 됐으면 이 로그를 띄움" + canvasId);
+        log.info("test내용 확인 : "+test);
+        simpMessagingTemplate.convertAndSend("/sub/testSub/"+canvasId, test);
     }
 
 }
