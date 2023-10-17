@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -108,16 +109,17 @@ public class CanvasService {
     }
 
     @Transactional
-    public CanvasResponseDto invite(Optional<Member> member, String canvasId, CanvasRequestDto requestDto) throws InterruptedException {
+    public CanvasResponseDto    invite(Optional<Member> member, String canvasId, CanvasRequestDto requestDto) throws InterruptedException {
 
         Canvas canvas = canvasRepository.findCanvasById(canvasId);
-
+        ArrayList<String> canvasMember = canvas.getWith();
         boolean isMember = member.isPresent();
-
-        for(String inviteIdCheck: canvas.getWith()) {
-            for(String requestIdList : requestDto.getWith()) {
-                if(inviteIdCheck.equals(requestIdList)) {
-                    throw new IllegalArgumentException("이미 초대 되어 있는 유저가 있습니다.");
+        if(canvasMember!=null) {
+            for(String inviteIdCheck: canvasMember) {
+                for(String requestIdList : requestDto.getWith()) {
+                    if(inviteIdCheck.equals(requestIdList)) {
+                        throw new IllegalArgumentException("이미 초대 되어 있는 유저가 있습니다.");
+                    }
                 }
             }
         }

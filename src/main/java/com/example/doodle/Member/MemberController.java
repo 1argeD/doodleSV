@@ -5,14 +5,15 @@ import com.example.doodle.Login.Dto.LoginRequestDto;
 import com.example.doodle.Login.Dto.SignupRequestDto;
 import com.example.doodle.Login.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.List;
+import javax.swing.*;
+import java.util.ArrayList;
 import java.util.Map;
 
 @Slf4j
@@ -53,5 +54,14 @@ public class MemberController {
         Member member = userDetails.getMember();
         memberService.logout(member);
         return ResponseEntity.ok().body(Map.of("msg", "로그아웃 완료"));
+    }
+
+
+    @PostMapping(value = "/findId/{canvasId}")
+    public ResponseEntity<?> findId(@AuthenticationPrincipal UserDetailsImpl userDetails,@PathVariable String canvasId,@RequestBody ArrayList<String> inviteMemberNickname) throws InterruptedException {
+        Member member = userDetails.getMember();
+        memberService.findId(member,canvasId ,inviteMemberNickname);
+        return ResponseEntity.ok().body(Map.of("success", "초대 성공"));
+
     }
 }
