@@ -59,6 +59,7 @@ public class MemberController {
 
     @PostMapping(value = "/findId/{canvasId}")
     public ResponseEntity<?> findId(@AuthenticationPrincipal UserDetailsImpl userDetails,@PathVariable String canvasId,@RequestBody ArrayList<String> inviteMemberNickname) throws InterruptedException {
+        log.info("어디서 걸리는지 확인 controller");
         Member member = userDetails.getMember();
         memberService.findId(member,canvasId ,inviteMemberNickname);
         return ResponseEntity.ok().body(Map.of("success", "초대 성공"));

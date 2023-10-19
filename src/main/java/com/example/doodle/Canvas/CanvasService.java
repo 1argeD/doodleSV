@@ -38,7 +38,8 @@ public class CanvasService {
                 .build();
 
         canvasRepository.save(canvas);
-//        redisRepository.subscribe(canvas.getId());
+        redisRepository.subscribe(canvas.getId());
+
 
         return CanvasResponseDto.CanvasResponseDtoBuilder(canvas);
     }
@@ -109,12 +110,13 @@ public class CanvasService {
     }
 
     @Transactional
-    public CanvasResponseDto    invite(Optional<Member> member, String canvasId, CanvasRequestDto requestDto) throws InterruptedException {
-
+    public CanvasResponseDto invite(Optional<Member> member, String canvasId, CanvasRequestDto requestDto) throws InterruptedException {
+        log.info("어디서 걸리는지 확인 invite");
         Canvas canvas = canvasRepository.findCanvasById(canvasId);
         ArrayList<String> canvasMember = canvas.getWith();
         boolean isMember = member.isPresent();
         if(canvasMember!=null) {
+            log.info("어디서 걸리는지 확인 canvasMember 체크");
             for(String inviteIdCheck: canvasMember) {
                 for(String requestIdList : requestDto.getWith()) {
                     if(inviteIdCheck.equals(requestIdList)) {

@@ -11,8 +11,6 @@ import com.example.doodle.Login.JWT.JwtProvider;
 import com.example.doodle.Login.RefreshToken.RefreshTokenRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.aspectj.apache.bcel.classfile.Module;
-import org.hibernate.boot.model.source.internal.hbm.XmlElementMetadata;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -89,10 +87,13 @@ public class MemberService {
         CanvasRequestDto canvasRequestDto = new CanvasRequestDto();
         Optional<Member> maker = Optional.ofNullable(member);
         boolean isMember = memberRepository.existsById(Objects.requireNonNull(member).getId());
+        log.info("어디서 걸리는지 확인 service");
+
         if(!isMember) {
             throw new IllegalArgumentException("회원 정보가 존재하지 않습니다 회원 정보를 확인해 주세요");
         }
         for(String nickname : inviteMemberNickname) {
+            log.info("어디서 걸리는지 확인 닉네임 확인");
             Optional<Member> inviteMemberId =  memberRepository.findMemberByNickname(nickname);
             inviteMemberId.ifPresent(value -> inviteMemberIdList.add(value.getId()));
         }

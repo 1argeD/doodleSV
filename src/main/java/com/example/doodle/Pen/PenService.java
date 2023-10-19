@@ -91,7 +91,7 @@ public class PenService {
                     .spot(penRequestDTO.getSpot())
                     .build();
 
-//            penRepository.save(pen);
+            penRepository.save(pen);
             redisService.setPenValue(pen, pen.getId());
             penList.add(pen);
 

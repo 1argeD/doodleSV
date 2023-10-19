@@ -14,8 +14,8 @@ import java.util.ArrayList;
 public class RedisPub {
     private final RedisTemplate<String, Object> redisTemplate;
     /*그림 그리기*/
-    public void drawPublish(ChannelTopic channelTopic, PenResponseDTO pen) {
-        redisTemplate.convertAndSend(channelTopic.getTopic(), pen);
+    public void drawPublish(ChannelTopic channelTopic, String penInfo) {
+        redisTemplate.convertAndSend(channelTopic.getTopic(), penInfo);
     }
     public void testPublish(ChannelTopic channelTopic, String test) {
         redisTemplate.convertAndSend(channelTopic.getTopic(), test);

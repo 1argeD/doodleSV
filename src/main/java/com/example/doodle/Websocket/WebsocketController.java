@@ -6,6 +6,7 @@ import com.example.doodle.Canvas.CanvasService;
 import com.example.doodle.Canvas.Dto.CanvasResponseDto;
 import com.example.doodle.Login.UserDetailsImpl;
 import com.example.doodle.Member.Member;
+import com.example.doodle.Pen.DTO.PenResponseDTO;
 import com.example.doodle.Pen.Pen;
 import com.example.doodle.Pen.PenService;
 import com.example.doodle.Redis.RedisPub;
@@ -42,25 +43,29 @@ public class WebsocketController {
     private final RedisRepository redisRepository;
     private final PenService penService;
 
+
     @MessageMapping(value = "/canvas/{canvasId}")
     public void enter(@DestinationVariable String canvasId, String penInfo) {
-        String memberId = penInfo.split(":")[1]
+        String canvas = penInfo.split(":")[1]
+                .split(",")[0]
+                .replace("\"","");
+        String memberId = penInfo.split(":")[2]
                 .split(",")[0].replace("\"","");
-        String penColor = penInfo.split(":")[2]
+        String penColor = penInfo.split(":")[3]
                 .split(",")[0].replace("\"","");
-        String spot = penInfo.split(":")[3]
+        String spot = penInfo.split(":")[4]
                 .replace("}","")
                 .replace("[","")
                 .replace("]","").replace("\"","");
-
         log.info("팬 정보 확인 : "+penInfo);
+        log.info("캔버스 아이디 확인"+canvas);
         log.info("아이디 확인 : "+ memberId);
         log.info("컬러 정보 확인 : "+ penColor);
         log.info("점 정보 확인 : "+ spot);
         log.info("캔버스 아이디 : " + canvasId);
-
 //spot을 ArrayList 데이터로 통신을 해야할지 그냥 String값으로 저장해두고 사용해야 할 지 아직 잘 모르겠음. 통신은 String이 용이한데, 수정은 배열값이 더 편할 거 같음. 그렇다고 계속 바꿔주기엔 쓸데없이 연산이 추가로 늘어날 가능성도 있음
         penService.penCreate(memberId,penColor,spot,canvasId);
+        simpMessagingTemplate.convertAndSend("/sub/canvas/"+canvasId,penInfo);
     }
 
 }
