@@ -50,10 +50,8 @@ public class CanvasService {
         List<Canvas> canvas = null;
         if(isMember) {
             canvas = canvasRepository.findCanvasByMaker(member.get().getId());
-        }
-        
-        if (canvas == null&&isMember) {
-            canvas = canvasRepository.findCanvasByWithExists(member.get().getId());
+            List<Canvas> InvitedCanvas = canvasRepository.findCanvasByWithIs(member.get().getId());
+            canvas.addAll(InvitedCanvas);
         }
 
         return Objects.requireNonNull(canvas).stream()

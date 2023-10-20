@@ -1,5 +1,7 @@
 package com.example.doodle.Canvas;
 
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 import org.springframework.stereotype.Repository;
@@ -13,6 +15,7 @@ public interface CanvasRepository extends MongoRepository<Canvas, String> {
 
    Canvas findCanvasById(String canvasId);
 
+    List<Canvas> findCanvasByWithIs(String withId);
     List<Canvas> findCanvasByWithExists(String withId);
     Canvas findCanvasByCanvasTitle(String canvas_title);
     void deleteById(String canvasId);
