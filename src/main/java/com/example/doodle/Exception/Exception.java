@@ -5,14 +5,20 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class Exception {
-    private String error;
+public class Exception extends Throwable{
+    private String status;
+    private String code;
     private String message;
+    private String localizedMessage;
+    private boolean success;
 
-    public Exception error(String error, String message) {
+    public Exception error(String status,String code, String message, String localizedMessage ,boolean success) {
         return Exception.builder()
-                .error(error)
+                .success(success)
+                .code(code)
+                .status(status)
                 .message(message)
+                .localizedMessage(localizedMessage)
                 .build();
     }
 }

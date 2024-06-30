@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.nio.file.attribute.UserPrincipalNotFoundException;
 import java.util.*;
 
 @Slf4j
@@ -56,11 +57,15 @@ public class CanvasController {
     }
 
     @DeleteMapping("/canvas/delete/{canvasId}")
-    public ResponseEntity<?> deleteCanvas(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable String canvasId) {
+    public ResponseEntity<?> deleteCanvas(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable String canvasId)  {
 
         Optional<Member> member = memberRepository.findById(userDetails.getMember().getId());
         if(member.isEmpty()) {
-            throw new IllegalArgumentException("회원정보가 없습니다.");
+            try {
+                throw new UserPrincipalNotFoundException("회원정보가 없습니다.");
+            } catch (UserPrincipalNotFoundException e) {
+                throw new RuntimeException(e);
+            }
         }
         canvasService.deleteCanvas(member.get().getId(), canvasId);
 

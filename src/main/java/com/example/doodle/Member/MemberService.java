@@ -11,6 +11,7 @@ import com.example.doodle.Login.JWT.JwtProvider;
 import com.example.doodle.Login.RefreshToken.RefreshTokenRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -35,7 +36,7 @@ public class MemberService {
     public boolean checkEmailIsDuplication(String email) {
         boolean isDuplication = memberRepository.existsByEmail(email);
             if (isDuplication) {
-                throw new IllegalArgumentException("이미 존재하는 회원입니다.");
+                throw new UsernameNotFoundException("이미 존재하는 회원입니다.");
         }
         return false;
     }
@@ -43,7 +44,7 @@ public class MemberService {
     public boolean checkNicknameDuplication(String nickname) {
         boolean isDuplication = memberRepository.existsByNickname(nickname);
         if (isDuplication) {
-            throw new IllegalArgumentException("이미 존재하는 닉네임입니다.");
+            throw new UsernameNotFoundException("이미 존재하는 닉네임입니다.");
         }
         return false;
     }
@@ -51,7 +52,7 @@ public class MemberService {
     public void checkPassword(String password, String encodingPassword) {
         boolean isSome = passwordEncoder.matches(password, encodingPassword);
         if (!isSome) {
-            throw new IllegalArgumentException("비밀번호를 확인하세요.");
+            throw new UsernameNotFoundException("비밀번호를 확인하세요.");
         }
     }
 
@@ -69,7 +70,7 @@ public class MemberService {
 
     public LoginResponseDto login(LoginRequestDto requestDto, HttpServletResponse response) {
         Member member = memberRepository.findByEmail(requestDto.getEmail())
-                .orElseThrow(() -> new IllegalArgumentException("아이디를 확인하세요."));
+                .orElseThrow(() -> new UsernameNotFoundException("아이디를 확인하세요."));
         checkPassword(requestDto.getPassword(), member.getPassword());
         String accessToken = jwtProvider.createAuthorizationToken(member.getEmail(), member.getRole());
         String refreshToken = jwtProvider.createRefreshToken(member, member.getRole());
@@ -87,10 +88,9 @@ public class MemberService {
         CanvasRequestDto canvasRequestDto = new CanvasRequestDto();
         Optional<Member> maker = Optional.ofNullable(member);
         boolean isMember = memberRepository.existsById(Objects.requireNonNull(member).getId());
-        log.info("어디서 걸리는지 확인 service");
 
         if(!isMember) {
-            throw new IllegalArgumentException("회원 정보가 존재하지 않습니다 회원 정보를 확인해 주세요");
+            throw new UsernameNotFoundException("회원 정보가 존재하지 않습니다 회원 정보를 확인해 주세요");
         }
         for(String nickname : inviteMemberNickname) {
             log.info("어디서 걸리는지 확인 닉네임 확인");
