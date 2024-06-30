@@ -9,6 +9,8 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 @Getter
 @AllArgsConstructor
@@ -32,6 +34,11 @@ public class Canvas extends Timestamped {
     }
 
     void invite(ArrayList<String> yous) {
-        this.with.addAll(yous);
+        if(with==null) {
+            with = new ArrayList<>();
+            this.with.addAll(yous);
+        } else {
+            this.with.addAll(yous);
+        }
     }
 }

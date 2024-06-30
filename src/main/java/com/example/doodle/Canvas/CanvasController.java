@@ -6,20 +6,20 @@ import com.example.doodle.Login.UserDetailsImpl;
 import com.example.doodle.Member.Member;
 import com.example.doodle.Member.MemberRepository;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.nio.file.attribute.UserPrincipalNotFoundException;
+import java.util.*;
 
+@Slf4j
 @AllArgsConstructor
 @RestController
 public class CanvasController {
     private final CanvasService canvasService;
     private final MemberRepository memberRepository;
-    private final CanvasRepository canvasRepository;
 
     @PostMapping("/canvas")
     public ResponseEntity<?> makeCanvas(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody CanvasRequestDto canvasRequestDto) {
@@ -30,9 +30,8 @@ public class CanvasController {
         return ResponseEntity.ok().body(canvasResponseDto);
     }
 
-    @GetMapping("/canvas/get")
+    @GetMapping("/canvas/all")
     public ResponseEntity<?> getCanvas(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-
         Optional<Member> member = memberRepository.findById(userDetails.getMember().getId());
 
         List<CanvasResponseDto> canvasList = canvasService.getCanvas(member);
@@ -40,10 +39,10 @@ public class CanvasController {
         return ResponseEntity.ok().body(canvasList);
     }
 
-    @GetMapping("/canvas/get/{canvasId}")
+    @GetMapping("/canvas/one/{canvasId}")
     public ResponseEntity<?> getOneCanvas(@AuthenticationPrincipal UserDetailsImpl userDetails,@PathVariable String canvasId) {
         Member user = userDetails.getMember();
-        CanvasResponseDto canvas = canvasService.getOneCanvas(user, canvasId);
+        CanvasResponseDto canvas = canvasService.getOneCanvas(user.getId(), canvasId);
         return ResponseEntity.ok().body(canvas);
 
     }
@@ -58,11 +57,15 @@ public class CanvasController {
     }
 
     @DeleteMapping("/canvas/delete/{canvasId}")
-    public ResponseEntity<?> deleteCanvas(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable String canvasId) {
+    public ResponseEntity<?> deleteCanvas(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable String canvasId)  {
 
         Optional<Member> member = memberRepository.findById(userDetails.getMember().getId());
         if(member.isEmpty()) {
-            throw new IllegalArgumentException("회원정보가 없습니다.");
+            try {
+                throw new UserPrincipalNotFoundException("회원정보가 없습니다.");
+            } catch (UserPrincipalNotFoundException e) {
+                throw new RuntimeException(e);
+            }
         }
         canvasService.deleteCanvas(member.get().getId(), canvasId);
 

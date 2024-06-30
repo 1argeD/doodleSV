@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -39,6 +40,7 @@ public class CanvasService {
         canvasRepository.save(canvas);
         redisRepository.subscribe(canvas.getId());
 
+
         return CanvasResponseDto.CanvasResponseDtoBuilder(canvas);
     }
 
@@ -48,10 +50,8 @@ public class CanvasService {
         List<Canvas> canvas = null;
         if(isMember) {
             canvas = canvasRepository.findCanvasByMaker(member.get().getId());
-        }
-        
-        if (canvas == null&&isMember) {
-            canvas = canvasRepository.findCanvasByWithExists(member.get().getId());
+            List<Canvas> InvitedCanvas = canvasRepository.findCanvasByWithIs(member.get().getId());
+            canvas.addAll(InvitedCanvas);
         }
 
         return Objects.requireNonNull(canvas).stream()
@@ -60,9 +60,8 @@ public class CanvasService {
     }
 
     @Transactional
-    public CanvasResponseDto getOneCanvas(Member user, String canvas_id) {
+    public CanvasResponseDto getOneCanvas(String userId, String canvas_id) {
         int k = 0;
-        String userId = user.getId();
         Canvas canvas = canvasRepository.findCanvasById(canvas_id);
         List<String> invited = canvas.getWith();
         for(String invitedUser : invited) {
@@ -110,15 +109,17 @@ public class CanvasService {
 
     @Transactional
     public CanvasResponseDto invite(Optional<Member> member, String canvasId, CanvasRequestDto requestDto) throws InterruptedException {
-
+        log.info("어디서 걸리는지 확인 invite");
         Canvas canvas = canvasRepository.findCanvasById(canvasId);
-
+        ArrayList<String> canvasMember = canvas.getWith();
         boolean isMember = member.isPresent();
-
-        for(String inviteIdCheck: canvas.getWith()) {
-            for(String requestIdList : requestDto.getWith()) {
-                if(inviteIdCheck.equals(requestIdList)) {
-                    throw new IllegalArgumentException("이미 초대 되어 있는 유저가 있습니다.");
+        if(canvasMember!=null) {
+            log.info("어디서 걸리는지 확인 canvasMember 체크");
+            for(String inviteIdCheck: canvasMember) {
+                for(String requestIdList : requestDto.getWith()) {
+                    if(inviteIdCheck.equals(requestIdList)) {
+                        throw new IllegalArgumentException("이미 초대 되어 있는 유저가 있습니다.");
+                    }
                 }
             }
         }
