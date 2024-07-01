@@ -13,6 +13,8 @@
 </br>
 <div>
 <h3>회원가입</h3>
+  
+![회원가입 페이지](https://github.com/1argeD/doodleSV/assets/94172354/a6e78c58-1ace-44b3-9d9b-08f4f7cb1b9b)
 
 </div>
 <div>
