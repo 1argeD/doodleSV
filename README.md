@@ -6,25 +6,22 @@
 
 <br>
 <hr>
-<br>
+<h3>Exception handler</h3>
 <details>
-<summary><h3>Exception handler</h3></summary>
+<summary>
+</summary>
 <ul>
 컨트롤러
-<br>   
    
 ![익셉션 컨트롤러](https://github.com/1argeD/doodleSV/assets/94172354/1845731e-e984-4f5a-ac0e-f20273f4aa98)
 
 enum
-<br>
 ![익셉션 enum](https://github.com/1argeD/doodleSV/assets/94172354/8e2ff454-4172-4962-9b6b-7451d403b13f)
 
 출력
-<br>
 ![에러출력](https://github.com/1argeD/doodleSV/assets/94172354/eedf878c-45bf-42f6-9330-59068c1e7179)
 <ul>
 </details>
-<br>
 <hr>
 <br>
 
